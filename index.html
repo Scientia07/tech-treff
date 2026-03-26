@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech-Treff Siebnen — Konzept</title>
+    <meta name="description" content="Der Tech-Treff Siebnen: Ein Jugend-Makerspace im Bezirk March für 3D-Druck, Elektronik, Coding und AI. Genehmigt und finanziert.">
+    <meta property="og:title" content="Tech-Treff Siebnen — Konzept">
+    <meta property="og:description" content="Jugendliche gestalten die Zukunft mit 3D-Druck, Elektronik, Coding und AI. Genehmigt durch den Bezirk March.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark: #0A1628;
+            --cyan: #00B4D8;
+            --orange: #FF6B35;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: white;
+            background: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .header-logos {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .header-logos img { height: 26px; opacity: 0.8; }
+        .header-logos .sep {
+            width: 1px; height: 20px;
+            background: rgba(255,255,255,0.15);
+        }
+        .header-status {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 12px; font-weight: 600; color: var(--cyan);
+        }
+        .header-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--cyan);
+            animation: pulse 2s ease infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,180,216,0.4); }
+            50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(0,180,216,0); }
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .hero-label {
+            font-size: 11px; font-weight: 700;
+            color: var(--cyan); text-transform: uppercase;
+            letter-spacing: 3px; margin-bottom: 14px;
+        }
+
+        h1 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 900; line-height: 1.1;
+            letter-spacing: -1px; margin-bottom: 12px;
+        }
+        h1 .cyan { color: var(--cyan); }
+
+        .subtitle {
+            font-size: clamp(14px, 2vw, 17px);
+            font-weight: 300; color: rgba(255,255,255,0.55);
+            max-width: 520px; line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        /* ─── FACTS ─── */
+        .facts {
+            display: flex; gap: 12px; flex-wrap: wrap;
+            justify-content: center; margin-bottom: 36px;
+        }
+        .fact {
+            padding: 8px 16px; border-radius: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .fact-label {
+            font-size: 9px; color: rgba(255,255,255,0.35);
+            text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .fact-value {
+            font-size: 15px; font-weight: 700; color: white;
+        }
+        .fact-value.cyan { color: var(--cyan); }
+
+        /* ─── DOWNLOAD CARDS ─── */
+        .downloads {
+            display: flex; gap: 16px; flex-wrap: wrap;
+            justify-content: center; margin-bottom: 40px;
+            max-width: 700px;
+        }
+
+        .dl-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 24px 28px;
+            text-align: left;
+            width: 320px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+        .dl-card:hover {
+            border-color: var(--cyan);
+            background: rgba(0,180,216,0.06);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,180,216,0.15);
+        }
+
+        .dl-card-icon {
+            font-size: 28px; margin-bottom: 10px;
+        }
+
+        .dl-card h3 {
+            font-size: 16px; font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .dl-card p {
+            font-size: 12px; color: rgba(255,255,255,0.5);
+            line-height: 1.5; margin-bottom: 12px;
+        }
+
+        .dl-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 12px; border-radius: 6px;
+            font-size: 11px; font-weight: 600;
+        }
+        .dl-badge-pdf {
+            background: rgba(220,50,50,0.15);
+            color: #ff6b6b;
+        }
+        .dl-badge-web {
+            background: rgba(0,180,216,0.15);
+            color: var(--cyan);
+        }
+
+        .dl-card-arrow {
+            float: right;
+            font-size: 18px;
+            color: var(--cyan);
+            opacity: 0;
+            transition: all 0.3s ease;
+            transform: translateX(-8px);
+        }
+        .dl-card:hover .dl-card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ─── TECH AREAS ─── */
+        .tech-strip {
+            display: flex; gap: 8px; flex-wrap: wrap;
+            justify-content: center; margin-bottom: 36px;
+        }
+        .tech-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 5px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 600;
+            background: rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.5);
+        }
+        .tech-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 20px 32px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+        }
+        footer a { color: var(--cyan); text-decoration: none; }
+        footer a:hover { color: white; }
+
+        /* ─── MOBILE ─── */
+        @media (max-width: 700px) {
+            .downloads { flex-direction: column; align-items: center; }
+            .dl-card { width: 100%; max-width: 340px; }
+            .facts { gap: 8px; }
+            .header { padding: 16px 20px; }
+            main { padding: 32px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-logos">
+        <img src="logos/logo_jbmarch.png" alt="Jugendbüro March">
+        <div class="sep"></div>
+        <img src="logos/logo_lunolabs-ondark.png" alt="LunoLabs">
+    </div>
+    <div class="header-status">
+        <div class="header-dot"></div>
+        Genehmigt & Finanziert
+    </div>
+</header>
+
+<main>
+    <div class="hero-label">Bezirk March &times; LunoLabs</div>
+
+    <h1>Tech-Treff <span class="cyan">Siebnen</span></h1>
+
+    <p class="subtitle">
+        Ein Jugend-Makerspace für 3D-Druck, Elektronik, Coding und AI —
+        kostenlos, niederschwellig, genehmigt durch den Bezirk March.
+    </p>
+
+    <div class="facts">
+        <div class="fact">
+            <div class="fact-label">Start</div>
+            <div class="fact-value cyan">Mai 2026</div>
+        </div>
+        <div class="fact">
+            <div class="fact-label">Zielgruppe</div>
+            <div class="fact-value">Ab 10 Jahren</div>
+        </div>
+        <div class="fact">
+            <div class="fact-label">Pilotdauer</div>
+            <div class="fact-value">3 Schuljahre</div>
+        </div>
+        <div class="fact">
+            <div class="fact-label">Kosten</div>
+            <div class="fact-value cyan">Kostenlos</div>
+        </div>
+    </div>
+
+    <div class="tech-strip">
+        <div class="tech-badge"><div class="tech-dot" style="background:#00B4D8;"></div> 3D-Druck</div>
+        <div class="tech-badge"><div class="tech-dot" style="background:#2d9a4e;"></div> Elektronik & Coding</div>
+        <div class="tech-badge"><div class="tech-dot" style="background:#e67e22;"></div> Robotik</div>
+        <div class="tech-badge"><div class="tech-dot" style="background:#8e44ad;"></div> Künstliche Intelligenz</div>
+        <div class="tech-badge"><div class="tech-dot" style="background:#27ae60;"></div> Recycling</div>
+    </div>
+
+    <div class="downloads">
+        <a class="dl-card" href="Konzept_Tech-Treff_V2.4.pdf" download>
+            <div class="dl-card-icon">📄</div>
+            <h3>Vollständiges Konzept <span class="dl-card-arrow">→</span></h3>
+            <p>20 Seiten — Bezirksantrag mit Zielen, Budget, Zeitplan, Infrastruktur und Rechtsgrundlagen.</p>
+            <span class="dl-badge dl-badge-pdf">PDF · 1.1 MB</span>
+        </a>
+        <a class="dl-card" href="Kurzfassung_Sponsoren.pdf" download>
+            <div class="dl-card-icon">🤝</div>
+            <h3>Sponsoren-Dossier <span class="dl-card-arrow">→</span></h3>
+            <p>3 Seiten — Kurzfassung für Partner und Sponsoren mit Leistungen und Partnerschafts-Modellen.</p>
+            <span class="dl-badge dl-badge-pdf">PDF · 0.5 MB</span>
+        </a>
+    </div>
+
+    <p style="font-size: 13px; color: rgba(255,255,255,0.3); max-width: 400px;">
+        Träger: Jugendbüro March · Technologiepartner: LunoLabs<br>
+        Treffpunkt Siebnen · Mittwoch, 14:00–17:00 · alle 2 Wochen
+    </p>
+</main>
+
+<footer>
+    <div>
+        <a href="mailto:info@lunolabs.ch">info@lunolabs.ch</a> ·
+        <a href="https://lunolabs.ch">lunolabs.ch</a>
+    </div>
+    <div>Bezirk March · Kanton Schwyz · Schweiz</div>
+</footer>
+
+</body>
+</html>
