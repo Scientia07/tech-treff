@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Tech-Treff Siebnen — Teilen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0A1628;
+            --bg2: #0f2240;
+            --fg: #ffffff;
+            --fg-muted: rgba(255,255,255,0.5);
+            --fg-dim: rgba(255,255,255,0.35);
+            --card-bg: rgba(255,255,255,0.04);
+            --card-border: rgba(255,255,255,0.08);
+            --btn-sec-bg: rgba(255,255,255,0.08);
+            --btn-sec-border: rgba(255,255,255,0.1);
+            --btn-tert-bg: rgba(255,255,255,0.04);
+            --btn-tert-border: rgba(255,255,255,0.06);
+            --btn-tert-fg: rgba(255,255,255,0.6);
+            --cyan: #00B4D8;
+            --cyan-glow: rgba(0,180,216,0.25);
+            --orange: #FF6B35;
+            --glow1-o: 0.15;
+            --glow2-o: 0.08;
+        }
+        [data-theme="light"] {
+            --bg: #f0f2f5;
+            --bg2: #e4e7ec;
+            --fg: #0A1628;
+            --fg-muted: rgba(10,22,40,0.55);
+            --fg-dim: rgba(10,22,40,0.4);
+            --card-bg: rgba(255,255,255,0.75);
+            --card-border: rgba(10,22,40,0.1);
+            --btn-sec-bg: rgba(10,22,40,0.06);
+            --btn-sec-border: rgba(10,22,40,0.1);
+            --btn-tert-bg: rgba(10,22,40,0.03);
+            --btn-tert-border: rgba(10,22,40,0.08);
+            --btn-tert-fg: rgba(10,22,40,0.55);
+            --cyan: #0090b0;
+            --cyan-glow: rgba(0,144,176,0.15);
+            --orange: #e55a28;
+            --glow1-o: 0.08;
+            --glow2-o: 0.05;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow: hidden;
+            position: relative;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+        .glow {
+            position: absolute;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .glow-1 { top: -100px; left: -100px; background: var(--cyan); opacity: var(--glow1-o); }
+        .glow-2 { bottom: -100px; right: -100px; background: var(--orange); opacity: var(--glow2-o); }
+
+        .container {
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 20px; max-width: 380px; width: 100%;
+        }
+
+        /* ── Theme Toggle ── */
+        .theme-toggle {
+            position: absolute; top: 16px; right: 16px; z-index: 10;
+            width: 52px; height: 28px;
+            border-radius: 14px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex; align-items: center;
+            padding: 3px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .theme-toggle .knob {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: var(--cyan);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        [data-theme="light"] .theme-toggle .knob {
+            transform: translateX(24px);
+        }
+
+        /* ── Logos ── */
+        .logos {
+            display: flex; align-items: center; justify-content: center;
+            gap: 20px; opacity: 0.9;
+        }
+        .logos img { height: 32px; object-fit: contain; }
+
+        h1 { font-size: 22px; font-weight: 800; text-align: center; line-height: 1.3; }
+        h1 .cyan { color: var(--cyan); transition: color 0.4s ease; }
+        .subtitle {
+            font-size: 13px; color: var(--fg-muted);
+            text-align: center; line-height: 1.5;
+            transition: color 0.4s ease;
+        }
+
+        /* ── QR Card ── */
+        .qr-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px; padding: 24px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 12px; width: 100%;
+            backdrop-filter: blur(10px);
+            animation: cardIn 0.6s ease both;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .qr-card img {
+            width: 220px; height: 220px; border-radius: 12px;
+        }
+        /* Show/hide QR based on theme */
+        .qr-dark { display: block; }
+        .qr-light { display: none; }
+        [data-theme="light"] .qr-dark { display: none; }
+        [data-theme="light"] .qr-light { display: block; }
+
+        .qr-label {
+            font-size: 11px; color: var(--fg-dim);
+            letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+            transition: color 0.4s ease;
+        }
+        .qr-url {
+            font-size: 13px; color: var(--cyan); font-weight: 500;
+            word-break: break-all; text-align: center;
+            transition: color 0.4s ease;
+        }
+
+        /* ── Buttons ── */
+        .actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px 20px; border-radius: 12px;
+            font-family: inherit; font-size: 15px; font-weight: 600;
+            border: none; cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%; text-decoration: none; color: inherit;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-nfc { background: var(--cyan); color: #fff; }
+        .btn-nfc:hover { filter: brightness(1.1); }
+        .btn-share {
+            background: var(--btn-sec-bg);
+            border: 1px solid var(--btn-sec-border);
+        }
+        .btn-share:hover { filter: brightness(1.15); }
+        .btn-copy {
+            background: var(--btn-tert-bg);
+            color: var(--btn-tert-fg);
+            border: 1px solid var(--btn-tert-border);
+            font-size: 13px;
+        }
+        .btn-visit {
+            background: linear-gradient(135deg, var(--orange), #e55a28);
+            color: white;
+        }
+
+        /* ── NFC Status ── */
+        .nfc-status {
+            display: none; align-items: center; justify-content: center;
+            gap: 8px; padding: 12px 16px; border-radius: 12px;
+            font-size: 13px; font-weight: 500; width: 100%; text-align: center;
+        }
+        .nfc-status.writing {
+            display: flex;
+            background: rgba(0,180,216,0.1); border: 1px solid rgba(0,180,216,0.2);
+            color: var(--cyan); animation: pulse 1.5s ease infinite;
+        }
+        .nfc-status.success {
+            display: flex;
+            background: rgba(39,174,96,0.1); border: 1px solid rgba(39,174,96,0.2);
+            color: #27ae60;
+        }
+        .nfc-status.error {
+            display: flex;
+            background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.2);
+            color: var(--orange);
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: rgba(39,174,96,0.95); color: white;
+            padding: 10px 20px; border-radius: 10px;
+            font-size: 13px; font-weight: 600;
+            transition: transform 0.3s ease; z-index: 10;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body data-theme="dark">
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln">
+    <div class="knob" id="themeIcon">🌙</div>
+</button>
+
+<div class="container">
+    <div class="logos">
+        <img src="logos/logo_jbmarch.png" alt="Jugendbüro March">
+        <img src="logos/logo_lunolabs-ondark.png" alt="LunoLabs">
+    </div>
+
+    <h1>Tech-Treff <span class="cyan">Siebnen</span></h1>
+    <p class="subtitle">Scanne den QR-Code oder teile den Link per NFC-Tap.</p>
+
+    <div class="qr-card">
+        <img class="qr-dark" src="qr-tech-treff-dark.png" alt="QR-Code Tech-Treff (dunkel)">
+        <img class="qr-light" src="qr-tech-treff-light.png" alt="QR-Code Tech-Treff (hell)">
+        <span class="qr-label">Scannen zum Öffnen</span>
+        <span class="qr-url" id="shareUrl">scientia07.github.io/tech-treff</span>
+    </div>
+
+    <div class="actions">
+        <!-- NFC — nur sichtbar wenn Web NFC unterstützt -->
+        <button class="btn btn-nfc" id="btnNfc">
+            📡 Per NFC teilen
+        </button>
+
+        <div class="nfc-status" id="nfcStatus"></div>
+
+        <!-- Web Share (native Android/iOS Share-Menu) -->
+        <button class="btn btn-share" id="btnShare">
+            ↗ Link teilen
+        </button>
+
+        <!-- Clipboard -->
+        <button class="btn btn-copy" id="btnCopy">
+            📋 Link kopieren
+        </button>
+
+        <!-- Direktlink -->
+        <a class="btn btn-visit" href="https://scientia07.github.io/tech-treff/" target="_blank">
+            🌐 Seite öffnen
+        </a>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SHARE_URL = 'https://scientia07.github.io/tech-treff/';
+const SHARE_TITLE = 'Tech-Treff Siebnen \u2014 Vom Konsumieren zum Gestalten';
+const SHARE_TEXT = 'Kostenloser Jugend-Makerspace f\u00fcr 3D-Druck, Elektronik, Coding und AI in Siebnen.';
+
+const btnNfc = document.getElementById('btnNfc');
+const btnShare = document.getElementById('btnShare');
+const btnCopy = document.getElementById('btnCopy');
+const nfcStatus = document.getElementById('nfcStatus');
+
+// ── Theme Toggle ──
+function setTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    document.getElementById('themeIcon').textContent = theme === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
+    localStorage.setItem('tt-share-theme', theme);
+}
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+    const current = document.body.getAttribute('data-theme');
+    setTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+// Restore saved theme
+const savedTheme = localStorage.getItem('tt-share-theme');
+if (savedTheme) setTheme(savedTheme);
+
+// ── Toast ──
+function showToast(msg, ms) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), ms || 2000);
+}
+
+// ── NFC ──
+// Web NFC braucht HTTPS + Chrome Android 89+
+// Auf localhost/file:// wird es nicht funktionieren — nur auf GitHub Pages
+let nfcAbort = null;
+
+if (!('NDEFReader' in window)) {
+    btnNfc.classList.add('hidden');
+}
+
+btnNfc.addEventListener('click', async () => {
+    if (!('NDEFReader' in window)) {
+        setNfcStatus('error', 'NFC wird von diesem Browser nicht unterstützt. Öffne die Seite in Chrome auf Android.');
+        return;
+    }
+
+    try {
+        if (nfcAbort) nfcAbort.abort();
+        nfcAbort = new AbortController();
+
+        setNfcStatus('writing', '📡 Halte ein NFC-fähiges Gerät an dein Handy...');
+        btnNfc.disabled = true;
+        btnNfc.textContent = '⏳ Warte auf NFC-Tap...';
+
+        const ndef = new NDEFReader();
+        await ndef.write({
+            records: [
+                { recordType: 'url', data: SHARE_URL },
+                { recordType: 'text', data: SHARE_TEXT, lang: 'de' }
+            ]
+        }, { signal: nfcAbort.signal });
+
+        setNfcStatus('success', '✓ Link wurde per NFC gesendet!');
+        showToast('NFC-Übertragung erfolgreich!');
+
+    } catch (err) {
+        if (err.name === 'AbortError') return;
+        if (err.name === 'NotAllowedError') {
+            setNfcStatus('error', 'NFC-Berechtigung verweigert. Gehe zu Chrome-Einstellungen → Website-Einstellungen → NFC → erlauben.');
+        } else if (err.name === 'NotSupportedError') {
+            setNfcStatus('error', 'NFC braucht HTTPS. Öffne diese Seite über GitHub Pages.');
+        } else {
+            setNfcStatus('error', 'NFC-Fehler: ' + err.message);
+        }
+    } finally {
+        btnNfc.disabled = false;
+        btnNfc.innerHTML = '📡 Per NFC teilen';
+    }
+});
+
+function setNfcStatus(type, msg) {
+    nfcStatus.className = 'nfc-status ' + type;
+    nfcStatus.textContent = msg;
+    if (type !== 'writing') {
+        setTimeout(() => { nfcStatus.className = 'nfc-status'; }, 5000);
+    }
+}
+
+// ── Web Share ──
+if (!navigator.share) btnShare.classList.add('hidden');
+
+btnShare.addEventListener('click', async () => {
+    try {
+        await navigator.share({ title: SHARE_TITLE, text: SHARE_TEXT, url: SHARE_URL });
+    } catch (err) {
+        if (err.name !== 'AbortError') showToast('Teilen abgebrochen');
+    }
+});
+
+// ── Copy ──
+btnCopy.addEventListener('click', async () => {
+    try {
+        await navigator.clipboard.writeText(SHARE_URL);
+    } catch {
+        const inp = document.createElement('input');
+        inp.value = SHARE_URL;
+        document.body.appendChild(inp);
+        inp.select();
+        document.execCommand('copy');
+        document.body.removeChild(inp);
+    }
+    btnCopy.textContent = '✓ Kopiert!';
+    showToast('Link kopiert!');
+    setTimeout(() => { btnCopy.textContent = '📋 Link kopieren'; }, 2000);
+});
+</script>
+
+</body>
+</html>
