@@ -3,300 +3,706 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech-Treff Siebnen — Konzept</title>
-    <meta name="description" content="Der Tech-Treff Siebnen: Ein Jugend-Makerspace im Bezirk March für 3D-Druck, Elektronik, Coding und AI. Genehmigt und finanziert.">
-    <meta property="og:title" content="Tech-Treff Siebnen — Konzept">
-    <meta property="og:description" content="Jugendliche gestalten die Zukunft mit 3D-Druck, Elektronik, Coding und AI. Genehmigt durch den Bezirk March.">
-    <meta property="og:type" content="website">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>Tech-Treff Siebnen — Vom Konsumieren zum Gestalten</title>
+    <meta name="description" content="Ein Jugend-Makerspace für 3D-Druck, Elektronik, Coding und AI — genehmigt und finanziert durch den Bezirk March.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --dark: #0A1628;
+            --dark2: #0f2240;
             --cyan: #00B4D8;
+            --cyan-glow: rgba(0,180,216,0.25);
             --orange: #FF6B35;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-
         body {
             font-family: 'Inter', sans-serif;
-            color: white;
             background: var(--dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            color: white;
+            overflow-x: hidden;
         }
 
-        /* ─── HEADER ─── */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 32px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        .header-logos {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .header-logos img { height: 26px; opacity: 0.8; }
-        .header-logos .sep {
-            width: 1px; height: 20px;
-            background: rgba(255,255,255,0.15);
-        }
-        .header-status {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 12px; font-weight: 600; color: var(--cyan);
-        }
-        .header-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--cyan);
-            animation: pulse 2s ease infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,180,216,0.4); }
-            50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(0,180,216,0); }
-        }
-
-        /* ─── MAIN ─── */
-        main {
-            flex: 1;
+        /* ═══════════════════════════════════════ */
+        /* PRELOADER                               */
+        /* ═══════════════════════════════════════ */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 9999;
+            background: var(--dark);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 24px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #preloader.done {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-ring {
+            width: 60px; height: 60px;
+            border: 3px solid rgba(255,255,255,0.06);
+            border-top-color: var(--cyan);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loader-text {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            animation: loaderFade 1.5s ease infinite;
+        }
+        @keyframes loaderFade {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; color: var(--cyan); }
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* ANIMATIONS                              */
+        /* ═══════════════════════════════════════ */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 30px var(--cyan-glow); }
+            50% { box-shadow: 0 0 60px var(--cyan-glow), 0 0 90px rgba(0,180,216,0.08); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes typeOut {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* HERO                                    */
+        /* ═══════════════════════════════════════ */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
+            position: relative;
+            padding: 40px 24px;
+            overflow: hidden;
+        }
+
+        #particles {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 600px; height: 600px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(0,180,216,0.08) 0%, transparent 70%);
+            z-index: 0;
+            animation: glowPulse 4s ease infinite;
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .hero-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 28px;
+            animation: fadeIn 1s ease 0.5s both;
+        }
+        .hero-logos img { height: 28px; opacity: 0.7; }
+        .hero-logos .sep {
+            width: 1px; height: 22px;
+            background: rgba(255,255,255,0.15);
         }
 
         .hero-label {
             font-size: 11px; font-weight: 700;
-            color: var(--cyan); text-transform: uppercase;
-            letter-spacing: 3px; margin-bottom: 14px;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 16px;
+            animation: fadeUp 0.8s ease 0.8s both;
         }
 
         h1 {
-            font-size: clamp(28px, 5vw, 48px);
-            font-weight: 900; line-height: 1.1;
-            letter-spacing: -1px; margin-bottom: 12px;
+            font-size: clamp(32px, 6vw, 56px);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+            animation: fadeUp 0.8s ease 1s both;
         }
         h1 .cyan { color: var(--cyan); }
 
-        .subtitle {
-            font-size: clamp(14px, 2vw, 17px);
-            font-weight: 300; color: rgba(255,255,255,0.55);
-            max-width: 520px; line-height: 1.6;
-            margin-bottom: 28px;
+        .hero-sub {
+            font-size: clamp(14px, 2vw, 18px);
+            font-weight: 300;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto 28px;
+            animation: fadeUp 0.8s ease 1.2s both;
         }
 
-        /* ─── FACTS ─── */
-        .facts {
-            display: flex; gap: 12px; flex-wrap: wrap;
-            justify-content: center; margin-bottom: 36px;
+        .hero-badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.8s ease 1.4s both;
         }
-        .fact {
-            padding: 8px 16px; border-radius: 8px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .fact-label {
-            font-size: 9px; color: rgba(255,255,255,0.35);
-            text-transform: uppercase; letter-spacing: 1px;
+        .badge {
+            padding: 6px 16px;
+            border-radius: 24px;
+            font-size: 12px;
             font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
-        .fact-value {
-            font-size: 15px; font-weight: 700; color: white;
+        .badge-cyan {
+            background: rgba(0,180,216,0.12);
+            border: 1px solid rgba(0,180,216,0.3);
+            color: var(--cyan);
         }
-        .fact-value.cyan { color: var(--cyan); }
+        .badge-ghost {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+        }
+        .badge-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+            animation: glowPulse 2s ease infinite;
+        }
 
-        /* ─── DOWNLOAD CARDS ─── */
-        .downloads {
-            display: flex; gap: 16px; flex-wrap: wrap;
-            justify-content: center; margin-bottom: 40px;
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: float 2s ease infinite, fadeIn 1s ease 2s both;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .scroll-hint span {
+            font-size: 10px;
+            color: rgba(255,255,255,0.25);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .scroll-arrow {
+            width: 20px; height: 20px;
+            border-right: 2px solid rgba(255,255,255,0.2);
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            transform: rotate(45deg);
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* TECH STRIP                              */
+        /* ═══════════════════════════════════════ */
+        .tech-section {
+            padding: 60px 24px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--dark) 0%, #0d1f38 100%);
+        }
+
+        .tech-grid {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 24px auto;
             max-width: 700px;
         }
 
-        .dl-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 14px;
-            padding: 24px 28px;
-            text-align: left;
-            width: 320px;
+        .tech-card {
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            gap: 10px;
             transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: white;
-            display: block;
+            cursor: default;
         }
-        .dl-card:hover {
+        .tech-card:hover {
             border-color: var(--cyan);
             background: rgba(0,180,216,0.06);
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0,180,216,0.15);
+            box-shadow: 0 8px 25px rgba(0,180,216,0.1);
+        }
+        .tech-card-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .tech-card span {
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        .dl-card-icon {
-            font-size: 28px; margin-bottom: 10px;
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* DOWNLOADS                               */
+        /* ═══════════════════════════════════════ */
+        .download-section {
+            padding: 80px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .download-section h2 {
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .download-section h2 .cyan { color: var(--cyan); }
+
+        .download-sub {
+            font-size: 14px;
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .dl-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .dl-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 28px 24px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .dl-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 200%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,180,216,0.03), transparent);
+            animation: shimmer 3s ease infinite;
+        }
+        .dl-card:hover {
+            border-color: var(--cyan);
+            background: rgba(0,180,216,0.05);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,180,216,0.15);
+        }
+        .dl-card.primary {
+            border-color: rgba(0,180,216,0.25);
+            background: rgba(0,180,216,0.05);
+        }
+
+        .dl-icon {
+            font-size: 32px;
+            margin-bottom: 14px;
         }
 
         .dl-card h3 {
-            font-size: 16px; font-weight: 700;
-            margin-bottom: 4px;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
 
         .dl-card p {
-            font-size: 12px; color: rgba(255,255,255,0.5);
-            line-height: 1.5; margin-bottom: 12px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.5;
+            margin-bottom: 16px;
+            flex: 1;
         }
 
-        .dl-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 4px 12px; border-radius: 6px;
-            font-size: 11px; font-weight: 600;
+        .dl-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            align-self: flex-start;
         }
-        .dl-badge-pdf {
-            background: rgba(220,50,50,0.15);
-            color: #ff6b6b;
+        .dl-tag-pdf {
+            background: rgba(220,60,60,0.12);
+            color: #ff7070;
         }
-        .dl-badge-web {
-            background: rgba(0,180,216,0.15);
+        .dl-tag-pitch {
+            background: rgba(0,180,216,0.12);
             color: var(--cyan);
         }
 
-        .dl-card-arrow {
-            float: right;
+        .dl-arrow {
+            position: absolute;
+            top: 24px; right: 24px;
             font-size: 18px;
             color: var(--cyan);
             opacity: 0;
-            transition: all 0.3s ease;
             transform: translateX(-8px);
+            transition: all 0.3s ease;
         }
-        .dl-card:hover .dl-card-arrow {
+        .dl-card:hover .dl-arrow {
             opacity: 1;
             transform: translateX(0);
         }
 
-        /* ─── TECH AREAS ─── */
-        .tech-strip {
-            display: flex; gap: 8px; flex-wrap: wrap;
-            justify-content: center; margin-bottom: 36px;
-        }
-        .tech-badge {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 5px 12px; border-radius: 20px;
-            font-size: 12px; font-weight: 600;
-            background: rgba(255,255,255,0.05);
-            color: rgba(255,255,255,0.5);
-        }
-        .tech-dot {
-            width: 6px; height: 6px; border-radius: 50%;
+        /* ═══════════════════════════════════════ */
+        /* PROOF BAR                               */
+        /* ═══════════════════════════════════════ */
+        .proof-section {
+            padding: 40px 24px 60px;
+            display: flex;
+            justify-content: center;
         }
 
-        /* ─── FOOTER ─── */
+        .proof-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            max-width: 700px;
+            width: 100%;
+            background: rgba(0,180,216,0.04);
+            border: 1px solid rgba(0,180,216,0.12);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .proof-item {
+            text-align: center;
+            padding: 22px 12px;
+            border-right: 1px solid rgba(0,180,216,0.08);
+        }
+        .proof-item:last-child { border-right: none; }
+        .proof-num {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--cyan);
+            line-height: 1;
+        }
+        .proof-label {
+            font-size: 9px;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* ═══════════════════════════════════════ */
+        /* FOOTER                                  */
+        /* ═══════════════════════════════════════ */
         footer {
-            padding: 20px 32px;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 24px 32px;
+            border-top: 1px solid rgba(255,255,255,0.04);
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 12px;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.2);
         }
-        footer a { color: var(--cyan); text-decoration: none; }
+        footer a {
+            color: var(--cyan);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
         footer a:hover { color: white; }
+        footer img { height: 16px; opacity: 0.3; }
 
-        /* ─── MOBILE ─── */
-        @media (max-width: 700px) {
-            .downloads { flex-direction: column; align-items: center; }
-            .dl-card { width: 100%; max-width: 340px; }
-            .facts { gap: 8px; }
-            .header { padding: 16px 20px; }
-            main { padding: 32px 20px; }
+        /* ═══════════════════════════════════════ */
+        /* RESPONSIVE                              */
+        /* ═══════════════════════════════════════ */
+        @media (max-width: 600px) {
+            .dl-grid { grid-template-columns: 1fr; }
+            .proof-bar { grid-template-columns: 1fr 1fr; }
+            .hero-logos img { height: 22px; }
+            footer { flex-direction: column; gap: 10px; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-<header class="header">
-    <div class="header-logos">
-        <img src="logos/logo_jbmarch.png" alt="Jugendbüro March">
-        <div class="sep"></div>
-        <img src="logos/logo_lunolabs-ondark.png" alt="LunoLabs">
-    </div>
-    <div class="header-status">
-        <div class="header-dot"></div>
-        Genehmigt & Finanziert
-    </div>
-</header>
+<!-- ═══ PRELOADER ═══ -->
+<div id="preloader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">LunoLabs</div>
+</div>
 
-<main>
-    <div class="hero-label">Bezirk March &times; LunoLabs</div>
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+    <div class="hero-glow"></div>
+    <canvas id="particles"></canvas>
 
-    <h1>Tech-Treff <span class="cyan">Siebnen</span></h1>
-
-    <p class="subtitle">
-        Ein Jugend-Makerspace für 3D-Druck, Elektronik, Coding und AI —
-        kostenlos, niederschwellig, genehmigt durch den Bezirk March.
-    </p>
-
-    <div class="facts">
-        <div class="fact">
-            <div class="fact-label">Start</div>
-            <div class="fact-value cyan">Mai 2026</div>
+    <div class="hero-content">
+        <div class="hero-logos">
+            <img src="logos/logo_jbmarch.png" alt="Jugendbüro March">
+            <div class="sep"></div>
+            <img src="logos/logo_lunolabs-ondark.png" alt="LunoLabs">
         </div>
-        <div class="fact">
-            <div class="fact-label">Zielgruppe</div>
-            <div class="fact-value">Ab 10 Jahren</div>
-        </div>
-        <div class="fact">
-            <div class="fact-label">Pilotdauer</div>
-            <div class="fact-value">3 Schuljahre</div>
-        </div>
-        <div class="fact">
-            <div class="fact-label">Kosten</div>
-            <div class="fact-value cyan">Kostenlos</div>
+
+        <div class="hero-label">Bezirk March &times; LunoLabs</div>
+
+        <h1>Vom Konsumieren<br>zum <span class="cyan">Gestalten.</span></h1>
+
+        <p class="hero-sub">
+            Ein Raum, in dem Jugendliche Zukunftstechnologien nicht nur nutzen — sondern verstehen, bauen und weitergeben.
+        </p>
+
+        <div class="hero-badges">
+            <div class="badge badge-cyan"><div class="badge-dot"></div> Genehmigt & Finanziert</div>
+            <div class="badge badge-ghost">Siebnen, Schwyz</div>
+            <div class="badge badge-ghost">Start Mai 2026</div>
         </div>
     </div>
 
-    <div class="tech-strip">
-        <div class="tech-badge"><div class="tech-dot" style="background:#00B4D8;"></div> 3D-Druck</div>
-        <div class="tech-badge"><div class="tech-dot" style="background:#2d9a4e;"></div> Elektronik & Coding</div>
-        <div class="tech-badge"><div class="tech-dot" style="background:#e67e22;"></div> Robotik</div>
-        <div class="tech-badge"><div class="tech-dot" style="background:#8e44ad;"></div> Künstliche Intelligenz</div>
-        <div class="tech-badge"><div class="tech-dot" style="background:#27ae60;"></div> Recycling</div>
+    <div class="scroll-hint">
+        <span>Entdecken</span>
+        <div class="scroll-arrow"></div>
+    </div>
+</section>
+
+<!-- ═══ TECH AREAS ═══ -->
+<section class="tech-section">
+    <div class="reveal">
+        <div class="section-title">Technologiebereiche</div>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="tech-card-dot" style="background: var(--cyan);"></div>
+                <span>🖨️ 3D-Druck</span>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-dot" style="background: #2d9a4e;"></div>
+                <span>⚡ Elektronik & Coding</span>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-dot" style="background: #e67e22;"></div>
+                <span>🤖 Robotik</span>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-dot" style="background: #8e44ad;"></div>
+                <span>🧠 Künstliche Intelligenz</span>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-dot" style="background: #27ae60;"></div>
+                <span>♻️ Kreislaufwirtschaft</span>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-dot" style="background: var(--orange);"></div>
+                <span>🏆 Wettbewerbe & Events</span>
+            </div>
+        </div>
+        <p style="font-size: 13px; color: rgba(255,255,255,0.3); max-width: 450px; margin: 0 auto;">
+            Kostenlos · Ab 10 Jahren · Keine Vorkenntnisse nötig<br>
+            Mittwoch 14:00–17:00 · Alle 2 Wochen · Treffpunkt Siebnen
+        </p>
+    </div>
+</section>
+
+<!-- ═══ PROOF ═══ -->
+<section class="proof-section">
+    <div class="proof-bar reveal">
+        <div class="proof-item">
+            <div class="proof-num">✓</div>
+            <div class="proof-label">Bezirk genehmigt</div>
+        </div>
+        <div class="proof-item">
+            <div class="proof-num">10k</div>
+            <div class="proof-label">CHF Startkapital</div>
+        </div>
+        <div class="proof-item">
+            <div class="proof-num">3 J.</div>
+            <div class="proof-label">Pilotprogramm</div>
+        </div>
+        <div class="proof-item">
+            <div class="proof-num">15+</div>
+            <div class="proof-label">Jugendliche Jahr 1</div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ DOWNLOADS ═══ -->
+<section class="download-section">
+    <div class="reveal">
+        <h2>Das Konzept <span class="cyan">entdecken.</span></h2>
+        <p class="download-sub">Alle Dokumente zum Herunterladen.</p>
     </div>
 
-    <div class="downloads">
-        <a class="dl-card" href="Konzept_Tech-Treff_V2.4.pdf" download>
-            <div class="dl-card-icon">📄</div>
-            <h3>Vollständiges Konzept <span class="dl-card-arrow">→</span></h3>
+    <div class="dl-grid reveal">
+        <a class="dl-card primary" href="Konzept_Tech-Treff_V2.4.pdf" download>
+            <div class="dl-arrow">→</div>
+            <div class="dl-icon">📄</div>
+            <h3>Vollständiges Konzept</h3>
             <p>20 Seiten — Bezirksantrag mit Zielen, Budget, Zeitplan, Infrastruktur und Rechtsgrundlagen.</p>
-            <span class="dl-badge dl-badge-pdf">PDF · 1.1 MB</span>
+            <span class="dl-tag dl-tag-pdf">PDF · 1.1 MB · 20 Seiten</span>
         </a>
-        <a class="dl-card" href="Kurzfassung_Sponsoren.pdf" download>
-            <div class="dl-card-icon">🤝</div>
-            <h3>Sponsoren-Dossier <span class="dl-card-arrow">→</span></h3>
-            <p>3 Seiten — Kurzfassung für Partner und Sponsoren mit Leistungen und Partnerschafts-Modellen.</p>
-            <span class="dl-badge dl-badge-pdf">PDF · 0.5 MB</span>
+        <a class="dl-card" href="Brand-Pitch_DE.pdf" download>
+            <div class="dl-arrow">→</div>
+            <div class="dl-icon">🚀</div>
+            <h3>Partnerschafts-Pitch</h3>
+            <p>6 Seiten — Vom Problem zur Lösung. Was der Tech-Treff ist und wie Ihre Marke Teil davon wird.</p>
+            <span class="dl-tag dl-tag-pitch">PDF · 6 Seiten</span>
         </a>
     </div>
+</section>
 
-    <p style="font-size: 13px; color: rgba(255,255,255,0.3); max-width: 400px;">
-        Träger: Jugendbüro March · Technologiepartner: LunoLabs<br>
-        Treffpunkt Siebnen · Mittwoch, 14:00–17:00 · alle 2 Wochen
-    </p>
-</main>
-
+<!-- ═══ FOOTER ═══ -->
 <footer>
     <div>
         <a href="mailto:info@lunolabs.ch">info@lunolabs.ch</a> ·
         <a href="https://lunolabs.ch">lunolabs.ch</a>
     </div>
-    <div>Bezirk March · Kanton Schwyz · Schweiz</div>
+    <img src="logos/logo_lunolabs-ondark.png" alt="LunoLabs">
 </footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+// Preloader
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('preloader').classList.add('done');
+    }, 1200);
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+    });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Particle network
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resize() {
+    canvas.width = canvas.offsetWidth * 2;
+    canvas.height = canvas.offsetHeight * 2;
+    ctx.scale(2, 2);
+}
+resize();
+window.addEventListener('resize', resize);
+
+class P {
+    constructor() {
+        this.x = Math.random() * canvas.offsetWidth;
+        this.y = Math.random() * canvas.offsetHeight;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.r = Math.random() * 2 + 0.5;
+        this.color = Math.random() > 0.75 ? '#00B4D8' : 'rgba(255,255,255,0.25)';
+    }
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.offsetWidth) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.offsetHeight) this.vy *= -1;
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+}
+
+for (let i = 0; i < 50; i++) particles.push(new P());
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    particles.forEach(p => { p.update(); p.draw(); });
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 140) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(0,180,216,${0.1 * (1 - dist/140)})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+    requestAnimationFrame(animate);
+}
+animate();
+</script>
 
 </body>
 </html>
