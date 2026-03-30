@@ -236,15 +236,16 @@
             gap: 6px;
         }
         .scroll-hint span {
-            font-size: 10px;
-            color: rgba(255,255,255,0.25);
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-weight: 600;
         }
         .scroll-arrow {
             width: 20px; height: 20px;
-            border-right: 2px solid rgba(255,255,255,0.2);
-            border-bottom: 2px solid rgba(255,255,255,0.2);
+            border-right: 2px solid rgba(0,180,216,0.5);
+            border-bottom: 2px solid rgba(0,180,216,0.5);
             transform: rotate(45deg);
         }
 
@@ -687,8 +688,8 @@ class P {
         this.y = Math.random() * canvas.offsetHeight;
         this.vx = (Math.random() - 0.5) * 0.4;
         this.vy = (Math.random() - 0.5) * 0.4;
-        this.r = Math.random() * 2 + 0.5;
-        this.color = Math.random() > 0.75 ? '#00B4D8' : 'rgba(255,255,255,0.25)';
+        this.r = Math.random() * 2.5 + 1;
+        this.color = Math.random() > 0.5 ? '#00B4D8' : 'rgba(255,255,255,0.4)';
     }
     update() {
         this.x += this.vx;
@@ -704,7 +705,7 @@ class P {
     }
 }
 
-for (let i = 0; i < 50; i++) particles.push(new P());
+for (let i = 0; i < 65; i++) particles.push(new P());
 
 function animate() {
     ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
@@ -718,8 +719,8 @@ function animate() {
                 ctx.beginPath();
                 ctx.moveTo(particles[i].x, particles[i].y);
                 ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = `rgba(0,180,216,${0.1 * (1 - dist/140)})`;
-                ctx.lineWidth = 0.5;
+                ctx.strokeStyle = `rgba(0,180,216,${0.2 * (1 - dist/140)})`;
+                ctx.lineWidth = 1;
                 ctx.stroke();
             }
         }
