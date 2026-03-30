@@ -291,8 +291,8 @@
         .scroll-hint {
             position: absolute;
             bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            right: 0;
             z-index: 2;
             animation: float 2s ease infinite, fadeIn 1s ease 2s both;
             display: flex;
@@ -548,6 +548,88 @@
         footer img { height: 16px; opacity: 0.3; }
 
         /* ═══════════════════════════════════════ */
+        /* NEED CARDS (clickable with popup)        */
+        /* ═══════════════════════════════════════ */
+        .need-grid {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        .need-card {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            user-select: none;
+        }
+        .need-card.primary {
+            background: rgba(0,180,216,0.08);
+            border: 1px solid rgba(0,180,216,0.2);
+            color: var(--cyan);
+        }
+        .need-card.secondary {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+        }
+        .need-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,180,216,0.15);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+        .need-card .need-popup {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            background: #162a4a;
+            border: 1px solid rgba(0,180,216,0.25);
+            border-radius: 12px;
+            padding: 16px 18px;
+            width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        .need-card .need-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: #162a4a;
+        }
+        .need-card.active .need-popup {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+            pointer-events: auto;
+        }
+        .need-popup h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 6px;
+        }
+        .need-popup p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* ═══════════════════════════════════════ */
         /* RESPONSIVE                              */
         /* ═══════════════════════════════════════ */
         @media (max-width: 600px) {
@@ -709,11 +791,35 @@
         <p style="font-size: 15px; color: rgba(255,255,255,0.55); max-width: 550px; margin: 0 auto 24px; line-height: 1.6;">
             Der Tech-Treff ist genehmigt und finanziert. Jetzt bauen wir den Raum auf — und suchen Partner, die mit uns Technologie zugänglich machen.
         </p>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 600px; margin: 0 auto;">
-            <div style="padding: 12px 20px; border-radius: 10px; background: rgba(0,180,216,0.08); border: 1px solid rgba(0,180,216,0.2); font-size: 13px; font-weight: 600; color: var(--cyan);">Hardware-Sponsoring</div>
-            <div style="padding: 12px 20px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6);">Bildungsrabatte</div>
-            <div style="padding: 12px 20px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6);">Know-how & Mentoring</div>
-            <div style="padding: 12px 20px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6);">Partnerschaften</div>
+        <div class="need-grid">
+            <div class="need-card primary" onclick="toggleNeed(this)">
+                Hardware-Sponsoring
+                <div class="need-popup">
+                    <h4>Hardware-Sponsoring</h4>
+                    <p>Wir suchen 3D-Drucker, Elektronik-Kits, Lötstationen und Werkzeuge für unser Lab. Im Gegenzug bieten wir Sichtbarkeit, Tutorials und Lessons Learned aus dem Einsatz mit Jugendlichen.</p>
+                </div>
+            </div>
+            <div class="need-card secondary" onclick="toggleNeed(this)">
+                Bildungsrabatte
+                <div class="need-popup">
+                    <h4>Bildungsrabatte</h4>
+                    <p>Auch vergünstigte Konditionen helfen uns enorm. Unser Budget ist begrenzt — jeder Franken Ersparnis fliesst direkt in mehr Möglichkeiten für die Jugendlichen.</p>
+                </div>
+            </div>
+            <div class="need-card secondary" onclick="toggleNeed(this)">
+                Know-how & Mentoring
+                <div class="need-popup">
+                    <h4>Know-how & Mentoring</h4>
+                    <p>Fachpersonen die einen Workshop geben, einen Nachmittag vorbeikommen oder ihr Wissen teilen möchten — jede Expertise bereichert das Programm.</p>
+                </div>
+            </div>
+            <div class="need-card secondary" onclick="toggleNeed(this)">
+                Partnerschaften
+                <div class="need-popup">
+                    <h4>Partnerschaften</h4>
+                    <p>Gemeinden, Schulen, Vereine oder Firmen die ein Lab bei sich aufbauen wollen — wir liefern Hardware, Lernprogramme und laufenden Support.</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -859,6 +965,18 @@ function animate() {
     requestAnimationFrame(animate);
 }
 animate();
+
+// Need card popups
+function toggleNeed(el) {
+    const wasActive = el.classList.contains('active');
+    document.querySelectorAll('.need-card').forEach(c => c.classList.remove('active'));
+    if (!wasActive) el.classList.add('active');
+}
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.need-card')) {
+        document.querySelectorAll('.need-card').forEach(c => c.classList.remove('active'));
+    }
+});
 </script>
 
 </body>
