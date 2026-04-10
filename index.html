@@ -622,6 +622,70 @@
         }
 
         /* ═══════════════════════════════════════ */
+        /* PARTNER MARQUEE                         */
+        /* ═══════════════════════════════════════ */
+        .partner-section {
+            padding: 60px 24px 40px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .partner-section h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .partner-section .partner-sub {
+            font-size: 14px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 36px;
+        }
+        .partner-marquee {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+        }
+        .partner-track {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            width: max-content;
+            animation: marquee 20s linear infinite;
+        }
+        .partner-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .partner-logo {
+            height: 40px;
+            object-fit: contain;
+            opacity: 0.55;
+            filter: grayscale(100%) brightness(2);
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+        }
+        .partner-logo:hover {
+            opacity: 1;
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.08);
+        }
+        .partner-logo.logo-hornbach {
+            height: 36px;
+            border-radius: 4px;
+        }
+        .partner-logo.logo-bezirk {
+            height: 44px;
+            filter: grayscale(100%) brightness(1.8);
+        }
+        .partner-logo.logo-bezirk:hover {
+            filter: grayscale(0%) brightness(1);
+        }
+
+        /* ═══════════════════════════════════════ */
         /* RESPONSIVE                              */
         /* ═══════════════════════════════════════ */
         @media (max-width: 600px) {
@@ -629,6 +693,9 @@
             .proof-bar { grid-template-columns: 1fr 1fr; }
             .hero-logos img { height: 22px; }
             footer { flex-direction: column; gap: 10px; text-align: center; }
+            .partner-track { gap: 40px; }
+            .partner-logo { height: 32px; }
+            .partner-logo.logo-bezirk { height: 36px; }
         }
     </style>
 </head>
@@ -774,6 +841,28 @@
         <div class="proof-item">
             <div class="proof-num">✓</div>
             <div class="proof-label">Aktive Jugendliche</div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ PARTNERS ═══ -->
+<section class="partner-section">
+    <div class="reveal">
+        <h2>Unsere <span class="cyan">Partner.</span></h2>
+        <p class="partner-sub">Gemeinsam Zukunft gestalten.</p>
+    </div>
+    <div class="partner-marquee reveal">
+        <div class="partner-track">
+            <!-- Set 1 -->
+            <img class="partner-logo" src="logos/logo_jbmarch.png" alt="Jugendbüro March">
+            <img class="partner-logo logo-bezirk" src="logos/logo_bezirk_march.png" alt="Bezirk March">
+            <img class="partner-logo logo-hornbach" src="logos/logo_hornbach.jpg" alt="Hornbach">
+            <img class="partner-logo" src="logos/logo_lunolabs-ondark.png" alt="LunoLabs">
+            <!-- Set 2 (Duplikat für nahtlose Schleife) -->
+            <img class="partner-logo" src="logos/logo_jbmarch.png" alt="Jugendbüro March">
+            <img class="partner-logo logo-bezirk" src="logos/logo_bezirk_march.png" alt="Bezirk March">
+            <img class="partner-logo logo-hornbach" src="logos/logo_hornbach.jpg" alt="Hornbach">
+            <img class="partner-logo" src="logos/logo_lunolabs-ondark.png" alt="LunoLabs">
         </div>
     </div>
 </section>
